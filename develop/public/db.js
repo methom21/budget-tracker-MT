@@ -1,28 +1,49 @@
+const indexedDB =
+  window.indexedDB ||
+  window.mozIndexedDB ||
+  window.webkitIndexedDB ||
+  window.msIndexedDB ||
+  window.shimIndexedDB;
 let db;
 let budgetVersion;
 
 // Create a new db request for a "budget" database.
 const request = indexedDB.open('BudgetDB', budgetVersion || 21);
 
-request.onupgradeneeded = function (e) {
-  console.log('Upgrade needed in IndexDB');
+// request.onupgradeneeded = function (e) {
+//   console.log('Upgrade needed in IndexDB');
 
-  const { oldVersion } = e;
-  const newVersion = e.newVersion || db.version;
+//   const { oldVersion } = e;
+//   const newVersion = e.newVersion || db.version;
 
-  console.log(`DB Updated from version ${oldVersion} to ${newVersion}`);
+//   console.log(`DB Updated from version ${oldVersion} to ${newVersion}`);
 
-  db = e.target.result;
+//   db = e.target.result;
 
-  if (db.objectStoreNames.length === 0) {
-    db.createObjectStore('BudgetStore', { autoIncrement: true });
+//   if (db.objectStoreNames.length === 0) {
+//     db.createObjectStore('BudgetStore', { autoIncrement: true });
+//   }
+// };
+request.onupgradeneeded = ({ target }) => {
+  let db = target.result;
+  db.createObjectStore("pending", { autoIncrement: true });
+};
+request.onsuccess = ({ target }) => {
+  db = target.result;
+  // check if app is online before reading from db
+  if (navigator.onLine) {
+    checkDatabase();
   }
 };
 
 request.onerror = function (e) {
   console.log(`Woops! ${e.target.errorCode}`);
 };
-
+function saveRecord(record) {
+  const transaction = db.transaction(["pending"], "readwrite");
+  const store = transaction.objectStore("pending");
+  store.add(record);
+}
 function checkDatabase() {
   console.log('check db invoked');
 

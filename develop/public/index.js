@@ -1,3 +1,12 @@
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then((reg) => {
+        console.log('Service worker registered.', reg);
+      });
+  });
+}
+
 let transactions = [];
 let myChart;
 
@@ -64,18 +73,18 @@ function populateChart() {
 
   let ctx = document.getElementById("myChart").getContext("2d");
 
-  myChart = new Chart(ctx, {
-    type: 'line',
-      data: {
-        labels,
-        datasets: [{
-            label: "Total Over Time",
-            fill: true,
-            backgroundColor: "#6666ff",
-            data
-        }]
-    }
-  });
+  // myChart = new Chart(ctx, {
+  //   type: 'line',
+  //     data: {
+  //       labels,
+  //       datasets: [{
+  //           label: "Total Over Time",
+  //           fill: true,
+  //           backgroundColor: "#6666ff",
+  //           data
+  //       }]
+  //   }
+  // });
 }
 
 function sendTransaction(isAdding) {
@@ -151,3 +160,4 @@ document.querySelector("#add-btn").onclick = function() {
 document.querySelector("#sub-btn").onclick = function() {
   sendTransaction(false);
 };
+
