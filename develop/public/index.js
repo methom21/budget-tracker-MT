@@ -73,18 +73,18 @@ function populateChart() {
 
   let ctx = document.getElementById("myChart").getContext("2d");
 
-  // myChart = new Chart(ctx, {
-  //   type: 'line',
-  //     data: {
-  //       labels,
-  //       datasets: [{
-  //           label: "Total Over Time",
-  //           fill: true,
-  //           backgroundColor: "#6666ff",
-  //           data
-  //       }]
-  //   }
-  // });
+  myChart = new Chart(ctx, {
+    type: 'line',
+      data: {
+        labels,
+        datasets: [{
+            label: "Total Over Time",
+            fill: true,
+            backgroundColor: "#6666ff",
+            data
+        }]
+    }
+  });
 }
 
 function sendTransaction(isAdding) {
